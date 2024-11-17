@@ -1,4 +1,3 @@
-# MySQL_1
 # MySQL Consultas Nivel Medio
 ## Introducción
 La gestión y análisis de datos mediante sistemas de bases de datos relacionales se ha convertido en una herramienta fundamental en el mundo actual. MySQL, como uno de los sistemas de gestión de bases de datos más utilizados, permite realizar consultas y análisis de información de manera efectiva. Este trabajo presenta una serie de consultas realizadas sobre la base de datos "WORLD", la cual contiene información relevante sobre países, ciudades, idiomas y otros datos demográficos a nivel mundial.
