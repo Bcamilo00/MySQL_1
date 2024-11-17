@@ -1,1 +1,7 @@
 # MySQL_1
+# MySQL Consultas Nivel Medio
+## Introducción
+La gestión y análisis de datos mediante sistemas de bases de datos relacionales se ha convertido en una herramienta fundamental en el mundo actual. MySQL, como uno de los sistemas de gestión de bases de datos más utilizados, permite realizar consultas y análisis de información de manera efectiva. Este trabajo presenta una serie de consultas realizadas sobre la base de datos "WORLD", la cual contiene información relevante sobre países, ciudades, idiomas y otros datos demográficos a nivel mundial.
+El objetivo principal de este trabajo es demostrar diferentes niveles de complejidad en las consultas SQL, empezando desde las más básicas hasta llegar a algunas más avanzadas. Se han organizado las consultas en tres niveles: básico, intermedio y adicional, permitiendo así una progresión gradual en el aprendizaje y comprensión de los conceptos.
+La base de datos "WORLD" resulta especialmente interesante para este ejercicio ya que contiene múltiples tablas relacionadas entre sí, lo que permite practicar diferentes tipos de consultas y operaciones. Además, al trabajar con datos reales sobre países y poblaciones, se pueden obtener resultados significativos y comprensibles que facilitan la verificación de la correcta ejecución de las consultas.
+A lo largo del trabajo se explorarán diferentes aspectos de MySQL, como el uso de funciones de agregación, subconsultas, joins entre tablas y funciones de ventana, demostrando así la versatilidad y potencia de este sistema de gestión de bases de datos.
