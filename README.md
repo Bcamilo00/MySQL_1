@@ -177,109 +177,158 @@ HAVING COUNT(*) > 10;
 
 ### 1. Encuentra los países que tienen al menos un idioma oficial y una población mayor a 20 millones.
 
-π Name(σ Population>20000000 ∧ IsOfficial= ′T′
- 
-​
- (Country⋈CountryLanguage))
+π Name(σ Population>20000000 ∧ IsOfficial= ′T′(Country⋈CountryLanguage))
+
 ```sql
 SELECT DISTINCT Continent
 FROM Country;
 
 ```
 
+![Ejemplo1_Basicas](https://github.com/Bcamilo00/MySQL_1/blob/main/a1.png)
 
+### 2. Lista los países que tienen más de 2 idiomas oficiales.
 
+π Name(σ count(Language)>2(Country⋈CountryLanguage WHERE IsOfficial=’T’ GROUP BY Country.Name))
 
 ```sql
+SELECT Country.Name
+FROM Country
+JOIN CountryLanguage ON Country.Code = CountryLanguage.CountryCode
+WHERE CountryLanguage.IsOfficial = 'T'
+GROUP BY Country.Name
+HAVING COUNT(DISTINCT CountryLanguage.Language) > 2;
+```
+
+![Ejemplo1_Basicas](https://github.com/Bcamilo00/MySQL_1/blob/main/a2.png)
+
+### 3. Encuentra los países que tienen el mismo idioma oficial que México.
+
+π Name(σ Language∈(π Language​(σ CountryCode= ′MEX′(CountryLanguage)))(Country⋈CountryLanguage))
+
+```sql
+SELECT DISTINCT Country.Name
+FROM Country
+JOIN CountryLanguage ON Country.Code = CountryLanguage.CountryCode
+WHERE CountryLanguage.Language IN (
+    SELECT Language
+    FROM CountryLanguage
+    WHERE CountryCode = 'MEX'
+);
+```
+
+![Ejemplo1_Basicas](https://github.com/Bcamilo00/MySQL_1/blob/main/a3.png)
+
+### 4. Encuentra las ciudades que tienen una población entre 1 y 2 millones y están en Europa.
+
+π City.Name (σ Continent= ′ Europe ′ ∧ Population≥1000000 ∧ Population≤2000000​(City⋈Country))
+
+```sql
+SELECT City.Name
+FROM City
+JOIN Country ON City.CountryCode = Country.Code
+WHERE Country.Continent = 'Europe' AND City.Population BETWEEN 1000000 AND 2000000;
+```
+
+![Ejemplo1_Basicas](https://github.com/Bcamilo00/MySQL_1/blob/main/a4.png)
+
+### 5. Encuentra los países con una superficie menor que la de Japón.
+
+π Name(σ SurfaceArea<(SELECTSurfaceAreaFROMCountryWHEREName= ′ Japan ′)​(Country))
+
+```sql
+SELECT Name
+FROM Country
+WHERE SurfaceArea < (SELECT SurfaceArea FROM Country WHERE Name = 'Japan');
+```
+
+![Ejemplo1_Basicas](https://github.com/Bcamilo00/MySQL_1/blob/main/a5.png)
+
+### 6. Lista los idiomas que son oficiales en más de 3 países en América.
+
+π Language​(σ IsOfficial= ′T′ ​(CountryLanguage⋈Country) GROUP BY Language HAVING count(CountryCode)>3 ∧ Continent= ′ America ′)
+
+```sql
+SELECT CountryLanguage.Language
+FROM CountryLanguage
+JOIN Country ON CountryLanguage.CountryCode = Country.Code
+WHERE Country.Continent = 'North America' OR Country.Continent = 'South America'
+AND CountryLanguage.IsOfficial = 'T'
+GROUP BY CountryLanguage.Language
+HAVING COUNT(DISTINCT Country.Code) > 3;
+```
+
+![Ejemplo1_Basicas](https://github.com/Bcamilo00/MySQL_1/blob/main/a6.png)
+
+### 7. Lista los países que tienen una capital con población mayor a 1 millón.
+
+π Name(σ City.Population>1000000 ∧ City.ID=Country.Capital​(City⋈Country))
+
+```sql
+SELECT Country.Name
+FROM Country
+JOIN City ON Country.Capital = City.ID
+WHERE City.Population > 1000000;
 
 ```
 
+![Ejemplo1_Basicas](https://github.com/Bcamilo00/MySQL_1/blob/main/a7.png)
 
+### 8. Encuentra los países que tienen más de 50% de su población viviendo en ciudades registradas.
 
-
-```sql
-
-```
-
-
-
+π Name​(σ urban population ratio>0.5​(Country JOIN with city population data))
 
 ```sql
-
+SELECT Country.Name
+FROM Country
+JOIN City ON Country.Code = City.CountryCode
+GROUP BY Country.Name, Country.Population
+HAVING SUM(City.Population) > 0.5 * Country.Population;
 ```
 
+![Ejemplo1_Basicas](https://github.com/Bcamilo00/MySQL_1/blob/main/a8.png)
 
+### 9. Encuentra las ciudades que son capitales en países de Asia y tienen una población menor a 500,000.
 
+πCity.Name​(σ Continent= ′Asia′ ∧ City.ID=Country.Capital ∧ City.Population<500000​(City⋈Country))
 
 ```sql
-
+SELECT City.Name
+FROM City
+JOIN Country ON City.ID = Country.Capital
+WHERE Country.Continent = 'Asia' AND City.Population < 500000;
 ```
 
+![Ejemplo1_Basicas](https://github.com/Bcamilo00/MySQL_1/blob/main/a9.png)
 
+### 10. Lista los países que tienen más de 10 idiomas registrados, sin importar si son oficiales o no.
 
+π Name​(σcount(Language)>10(Country⋈CountryLanguage GROUP BY Country.Name))
 
 ```sql
-
+SELECT Country.Name
+FROM Country
+JOIN CountryLanguage ON Country.Code = CountryLanguage.CountryCode
+GROUP BY Country.Name
+HAVING COUNT(CountryLanguage.Language) > 10;
 ```
 
+![Ejemplo1_Basicas](https://github.com/Bcamilo00/MySQL_1/blob/main/a10.png)
 
+## Conclusiones
 
+- Comprensión de las Relaciones y Consultas: Hemos aprendido a traducir problemas del mundo real en consultas formales usando álgebra relacional y luego implementarlas en SQL. Esto fortalece nuestra capacidad para analizar y estructurar datos de manera lógica y precisa.
 
-```sql
+- Manejo de Operaciones Complejas: Desarrollar consultas avanzadas, como las que involucran funciones de agregación, operaciones de unión, y subconsultas, nos ayuda a comprender cómo manipular grandes volúmenes de datos y extraer información relevante de manera eficiente.
 
-```
+- Optimización de Consultas: Aprender a usar condiciones específicas y funciones de filtrado nos enseña la importancia de optimizar consultas, lo que es fundamental para el rendimiento de las bases de datos. Esta habilidad se vuelve especialmente útil cuando trabajamos con datos a gran escala.
 
+- Conexiones y Relaciones entre Tablas: Trabajar con operadores como JOIN y entender cómo las tablas se relacionan en una base de datos nos permite desarrollar consultas más complejas y extraer datos significativos de múltiples fuentes.
 
+- Pensamiento Lógico y Análisis de Datos: Resolver problemas a través de consultas fomenta un pensamiento lógico y estructurado. Nos obliga a descomponer problemas complejos en pasos más pequeños y manejables, lo que es esencial para el análisis de datos.
 
+## Referencias
 
-```sql
+https://chatgpt.com/?model=auto
 
-```
-
-
-
-```sql
-
-```
-
-
-
-
-```sql
-
-```
-
-
-
-
-
-```sql
-
-```
-
-
-```sql
-
-```
-
-
-
-
-```sql
-
-```
-
-
-
-
-```sql
-
-```
-
-
-
-
-
-```sql
-
-```
+https://claude.ai/new
